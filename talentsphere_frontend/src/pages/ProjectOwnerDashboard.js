@@ -33,61 +33,68 @@ function ProjectOwnerDashboard() {
 
     return ( <
         div style = {
-            { textAlign: "center", padding: "50px" } } >
+            { textAlign: "center", padding: "50px" }
+        } >
         <
         h2 > Project Owner Dashboard < /h2>
 
         <
         button onClick = {
-            () => navigate("/projects-and-applications") } > View Projects and Applications < /button>
+            () => navigate("/projects-and-applications")
+        } > View Projects and Applications < /button> <
+        button onClick = {
+            () => navigate("/post-project")
+        } > Post a New Project < /button>
 
         <
         h3 > Posted Projects < /h3> {
-            projects.length === 0 ? ( <
-                p > No projects posted yet. < /p>
-            ) : (
-                projects.map((project) => ( <
-                    div key = { project.id }
-                    style = {
-                        { border: "1px solid gray", padding: "10px", margin: "10px" } } >
-                    <
-                    p > < strong > Project Name: < /strong> {project.project_name}</p >
-                    <
-                    p > < strong > Description: < /strong> {project.description}</p >
-                    <
-                    p > < strong > Deadline: < /strong> {project.deadline}</p >
-                    <
-                    p > < strong > Credits: < /strong> {project.credits}</p >
-                    <
-                    /div>
-                ))
-            )
-        }
+        projects.length === 0 ? ( <
+            p > No projects posted yet. < /p>
+        ) : (
+            projects.map((project) => ( <
+                div key = { project.id }
+                style = {
+                    { border: "1px solid gray", padding: "10px", margin: "10px" }
+                } >
+                <
+                p > < strong > Project Name: < /strong> {project.project_name}</p >
+                <
+                p > < strong > Description: < /strong> {project.description}</p >
+                <
+                p > < strong > Deadline: < /strong> {project.deadline}</p >
+                <
+                p > < strong > Credits: < /strong> {project.credits}</p >
+                <
+                /div>
+            ))
+        )
+    }
 
-        <
-        h3 > Applications Received < /h3> {
-            applications.length === 0 ? ( <
-                p > No applications yet. < /p>
-            ) : (
-                applications.map((app) => ( <
-                    div key = { app.id }
-                    style = {
-                        { border: "1px solid gray", padding: "10px", margin: "10px" } } >
-                    <
-                    p > < strong > Student Name: < /strong> {app.student_name}</p >
-                    <
-                    p > < strong > Project Name: < /strong> {app.project_name}</p >
-                    <
-                    p > < strong > Interview Date: < /strong> {app.date}</p >
-                    <
-                    p > < strong > Interview Time: < /strong> {app.time}</p >
-                    <
-                    /div>
-                ))
-            )
-        } <
-        /div>
-    );
+    <
+    h3 > Applications Received < /h3> {
+    applications.length === 0 ? ( <
+        p > No applications yet. < /p>
+    ) : (
+        applications.map((app) => ( <
+            div key = { app.id }
+            style = {
+                { border: "1px solid gray", padding: "10px", margin: "10px" }
+            } >
+            <
+            p > < strong > Student Name: < /strong> {app.student_name}</p >
+            <
+            p > < strong > Project Name: < /strong> {app.project_name}</p >
+            <
+            p > < strong > Interview Date: < /strong> {app.date}</p >
+            <
+            p > < strong > Interview Time: < /strong> {app.time}</p >
+            <
+            /div>
+        ))
+    )
+} <
+/div>
+);
 }
 
 export default ProjectOwnerDashboard;

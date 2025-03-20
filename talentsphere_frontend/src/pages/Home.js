@@ -6,15 +6,18 @@ function Home() {
 
     return ( <
         div style = {
-            { textAlign: "center", padding: "50px" } } >
+            { textAlign: "center", padding: "50px" }
+        } >
         <
         h1 > Welcome to TalentSphere < /h1> <
         p > Connect students with industrial projects. < /p> <
         button onClick = {
-            () => navigate("/login") } > Login < /button> <
+            () => navigate("/login")
+        } > Login < /button> <
         button onClick = {
-            () => navigate("/signup") } > Signup < /button> <
-        /div>
+            () => navigate("/signup")
+        } > Signup < /button> < /
+        div >
     );
 }
 

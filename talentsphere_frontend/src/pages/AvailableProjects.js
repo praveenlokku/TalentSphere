@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 
@@ -7,46 +7,41 @@ function AvailableProjects() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function fetchProjects() {
-            try {
-                const response = await api.get("projects/");
-                setProjects(response.data);
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        }
         fetchProjects();
     }, []);
 
+    const fetchProjects = async() => {
+        try {
+            const response = await api.get("projects/");
+            setProjects(response.data);
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
+
+    const handleApply = (projectId) => {
+        navigate(`/apply/${projectId}`);
+    };
+
+
     return ( <
-        div style = {
-            { textAlign: "center", padding: "50px" } } >
+        div >
         <
-        h2 > Available Projects < /h2> {
-            projects.length === 0 ? ( <
-                p > No projects available. < /p>
-            ) : (
-                projects.map((project) => ( <
-                    div key = { project.id }
-                    style = {
-                        { border: "1px solid gray", padding: "10px", margin: "10px" } } >
-                    <
-                    h3 > { project.project_name } < /h3> <
-                    p > < strong > Description: < /strong> {project.description}</p >
-                    <
-                    p > < strong > Skills Required: < /strong> {project.skills_required}</p >
-                    <
-                    p > < strong > Deadline: < /strong> {project.deadline}</p >
-                    <
-                    p > < strong > Credits: < /strong> {project.credits}</p >
-                    <
-                    button onClick = {
-                        () => navigate(`/team-details/${project.id}`) } > Apply < /button> <
-                    /div>
-                ))
-            )
+        h2 > Available Projects < /h2> <
+        ul > {
+            projects.map((project) => ( <
+                li key = { project.id } >
+                <
+                h3 > { project.name } < /h3> <
+                p > { project.description } < /p> <
+                button onClick = {
+                    () => handleApply(project.id)
+                } > Apply < /button> < /
+                li >
+            ))
         } <
-        /div>
+        /ul> < /
+        div >
     );
 }
 

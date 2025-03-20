@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,18 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0p)xv32avdjk3lhx@kq0-88*wl2qqtrq&9gt-@b3g)6m4n(@x2"
+SECRET_KEY = "postgresql://praveen:XP3mo1FuapzWTYbHqLCkTo3tXc8y1jXJ@dpg-cve1qdvnoe9s73ek7qg0-a.oregon-postgres.render.com/talentsphere"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'corsheaders',
+    "django_extensions",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -63,6 +65,8 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 
@@ -92,15 +96,12 @@ WSGI_APPLICATION = "talentsphere_backend.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'talentsphere',
-        'USER': 'praveen',
-        'PASSWORD': 'Bu@#9063808032',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'dj_database_url.config()',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+DATABASES["default"] = dj_database_url.parse("postgresql://praveen:XP3mo1FuapzWTYbHqLCkTo3tXc8y1jXJ@dpg-cve1qdvnoe9s73ek7qg0-a.oregon-postgres.render.com/talentsphere")
 
 
 # Password validation
@@ -145,3 +146,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+

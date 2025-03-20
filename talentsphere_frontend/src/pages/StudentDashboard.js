@@ -20,28 +20,29 @@ function StudentDashboard() {
     }, [navigate]);
 
     return ( <
-            div style = {
-                { textAlign: "center", padding: "50px" }
-            } >
-            <
-            h2 > Student Dashboard < /h2> {
+        div style = {
+            { textAlign: "center", padding: "50px" } } >
+        <
+        h2 > Student Dashboard < /h2> {
             user ? ( <
                 >
                 <
                 p > Welcome, { user.username }! < /p> <
                 button onClick = {
-                    () => navigate('/create-team')
-                } > Create a Team < /button>  <
+                    () => navigate('/create-team') } > Create a Team < /button>   <
                 button onClick = {
-                    () => navigate("/available-projects")
-                } > Find Projects < /button> < / >
-
+                    () => navigate("/available-projects") } > Find Projects < /button>   <
+                button onClick = {
+                    () => navigate("/prepare-interview") } > Practice Interview < /button>   <
+                button onClick = {
+                    () => navigate("/my-team") } > My Team < /button>   <
+                />
             ) : ( <
                 p > Loading... < /p>
             )
         } <
         /div>
-);
+    );
 }
 
 export default StudentDashboard;

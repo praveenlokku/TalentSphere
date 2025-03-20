@@ -8,10 +8,11 @@ import ProjectOwnerDashboard from "./pages/ProjectOwnerDashboard";
 import PostProject from "./pages/PostProject";
 import CreateTeam from "./pages/CreateTeam";
 import ApplyProject from "./pages/ApplyProject";
-import TeamDetails from "./pages/TeamDetails";
+import MyTeam from "./pages/MyTeam"; // Updated import name for clarity
 import ScheduleInterview from "./pages/ScheduleInterview";
 import AvailableProjects from "./pages/AvailableProjects";
 import ProjectsAndApplications from "./pages/ProjectsAndApplications";
+
 
 function App() {
     return ( <
@@ -36,22 +37,26 @@ function App() {
         /> <
         Route path = "/post-project"
         element = { < PostProject / > }
-        /> <Route path="/schedule - interview /: projectId " element={<ScheduleInterview />} /> <
+        /><
         Route path = "/create-team"
         element = { < CreateTeam / > }
         />  <
-        Route path = "/team-details/:projectId"
-        element = { < TeamDetails / > }
+        Route path = "/my-team"
+        element = { < MyTeam / > }
         /><
+        Route path = "/available-projects"
+        element = { < AvailableProjects / > }
+        />  <
         Route path = "/apply/:projectId"
         element = { < ApplyProject / > }
-        />  <
+        /> <
         Route path = "/projects-and-applications"
         element = { < ProjectsAndApplications / > }
         /> <
-        Route path = "/available-projects"
-        element = { < AvailableProjects / > }
-        />< /
+        Route path = "/schedule-interview/:projectId"
+        element = { < ScheduleInterview / > }
+        />  <
+        /
         Routes > <
         /Router>
     );

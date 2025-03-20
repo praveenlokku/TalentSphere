@@ -66,94 +66,99 @@ function CreateTeam() {
 
     return ( <
         div style = {
-            { textAlign: 'center', padding: '50px' } } >
+            { textAlign: 'center', padding: '50px' }
+        } >
         <
         h2 > Create a Team < /h2> {
-            error && < p style = {
-                    { color: 'red' } } > { error } < /p>} <
-                form onSubmit = { handleCreateTeam } >
+        error && < p style = {
+            { color: 'red' }
+        } > { error } < /p>} <
+        form onSubmit = { handleCreateTeam } >
+        <
+        div >
+        <
+        input type = "text"
+        placeholder = "Team Name"
+        value = { teamName }
+        onChange = {
+            (e) => setTeamName(e.target.value)
+        }
+        required /
+        >
+        <
+        /div> <
+        div >
+        <
+        input type = "number"
+        placeholder = "Team Size"
+        value = { teamSize }
+        onChange = { handleTeamSizeChange }
+        required min = "1" /
+        >
+        <
+        /div>
+
+        { /* Dynamic Team Member Inputs */ } {
+            teamMembers.map((member, index) => ( <
+                div key = { index }
+                style = {
+                    { border: '1px solid gray', padding: '10px', margin: '10px' }
+                } >
                 <
-                div >
-                <
-                input
-            type = "text"
-            placeholder = "Team Name"
-            value = { teamName }
-            onChange = {
-                (e) => setTeamName(e.target.value) }
-            required
-                /
+                h4 > Member { index + 1 } < /h4> <
+                input type = "text"
+                placeholder = "Name"
+                value = { member.name }
+                onChange = {
+                    (e) => handleMemberChange(index, 'name', e.target.value)
+                }
+                required /
                 >
                 <
-                /div> <
-                div >
+                input type = "text"
+                placeholder = "Skills (comma separated)"
+                value = { member.skills }
+                onChange = {
+                    (e) => handleMemberChange(index, 'skills', e.target.value)
+                }
+                required /
+                >
                 <
-                input
-            type = "number"
-            placeholder = "Team Size"
-            value = { teamSize }
-            onChange = { handleTeamSizeChange }
-            required
-            min = "1" /
+                input type = "text"
+                placeholder = "Role (e.g., Student)"
+                value = { member.role }
+                onChange = {
+                    (e) => handleMemberChange(index, 'role', e.target.value)
+                }
+                required /
+                >
+                <
+                input type = "text"
+                placeholder = "College Name"
+                value = { member.college }
+                onChange = {
+                    (e) => handleMemberChange(index, 'college', e.target.value)
+                }
+                required /
+                >
+                <
+                input type = "file"
+                onChange = {
+                    (e) => handleResumeChange(index, e.target.files[0])
+                }
+                accept = ".pdf,.doc,.docx"
+                required /
                 >
                 <
                 /div>
+            ))
+        }
 
-            { /* Dynamic Team Member Inputs */ } {
-                teamMembers.map((member, index) => ( <
-                    div key = { index }
-                    style = {
-                        { border: '1px solid gray', padding: '10px', margin: '10px' } } >
-                    <
-                    h4 > Member { index + 1 } < /h4> <
-                    input type = "text"
-                    placeholder = "Name"
-                    value = { member.name }
-                    onChange = {
-                        (e) => handleMemberChange(index, 'name', e.target.value) }
-                    required /
-                    >
-                    <
-                    input type = "text"
-                    placeholder = "Skills (comma separated)"
-                    value = { member.skills }
-                    onChange = {
-                        (e) => handleMemberChange(index, 'skills', e.target.value) }
-                    required /
-                    >
-                    <
-                    input type = "text"
-                    placeholder = "Role (e.g., Student)"
-                    value = { member.role }
-                    onChange = {
-                        (e) => handleMemberChange(index, 'role', e.target.value) }
-                    required /
-                    >
-                    <
-                    input type = "text"
-                    placeholder = "College Name"
-                    value = { member.college }
-                    onChange = {
-                        (e) => handleMemberChange(index, 'college', e.target.value) }
-                    required /
-                    >
-                    <
-                    input type = "file"
-                    onChange = {
-                        (e) => handleResumeChange(index, e.target.files[0]) }
-                    accept = ".pdf,.doc,.docx"
-                    required /
-                    >
-                    <
-                    /div>
-                ))
-            }
+        <
+        button type = "submit" > Create Team < /button> < /
+        form > <
+        /div>
+    );
+}
 
-            <
-            button type = "submit" > Create Team < /button> <
-                /form> <
-                /div>
-        );
-    }
-
-    export default CreateTeam;
+export default CreateTeam;

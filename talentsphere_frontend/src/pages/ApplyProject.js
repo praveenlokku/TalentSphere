@@ -1,64 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import api from '../api';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api";
 
 function ApplyProject() {
     const { projectId } = useParams();
-    const [teams, setTeams] = useState([]);
-    const [selectedTeam, setSelectedTeam] = useState('');
-    const [error, setError] = useState('');
+    const [team, setTeam] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchTeams = async() => {
-            try {
-                const response = await api.get('teams/');
-                setTeams(response.data);
-            } catch (error) {
-                console.error('Failed to fetch teams');
-            }
-        };
-
-        fetchTeams();
+        fetchTeam();
     }, []);
 
-    const handleApply = async() => {
+    const fetchTeam = async() => {
         try {
-            const response = await api.post('apply/', {
-                project: projectId,
-                team: selectedTeam,
-            });
-            alert('Application submitted! Now, schedule your interview.');
-            // Assume response.data returns the application id as "id"
-            const applicationId = response.data.id;
-            navigate(`/schedule-interview/${applicationId}`);
-        } catch (err) {
-            setError('Failed to apply.');
+            const response = await api.get("teams/my-team/");
+            setTeam(response.data);
+        } catch (error) {
+            console.error("Error fetching team data:", error);
         }
     };
 
-    return ( <
-        div style = {
-            { textAlign: 'center', padding: '50px' } } >
-        <
-        h2 > Apply
-        for Project < /h2> {
-            error && < p style = {
-                    { color: 'red' } } > { error } < /p>} <
-                select value = { selectedTeam }
-            onChange = {
-                    (e) => setSelectedTeam(e.target.value) } >
-                <
-                option value = "" > Select your team < /option> {
-                    teams.map((team) => ( <
-                        option key = { team.id }
-                        value = { team.id } > { team.team_name } < /option>
-                    ))
-                } <
-                /select> <
-                button onClick = { handleApply } > Apply < /button> <
-                /div>
-        );
-    }
+    const handleConfirm = async() => {
+        try {
+            if (!team || !team.id) {
+                alert("Error: Team information is missing or not loaded!");
+                return;
+            }
 
-    export default ApplyProject;
+            const response = await api.post("projects/apply/", {
+                project_id: projectId,
+                team_id: team.id,
+            });
+
+            if (response.data.redirect_url) {
+                navigate(response.data.redirect_url); // ✅ Redirects to Interview Scheduling Page
+            } else {
+                alert("Application submitted successfully!");
+            }
+        } catch (error) {
+            console.error(
+                "Error applying for project:",
+                error.response && error.response.data ? error.response.data : error.message
+            );
+        }
+    };
+
+    if (!team) return <p > Loading... < /p>;
+
+    return ( <
+        div >
+        <
+        h2 > Confirm Your Team
+        for Application < /h2> <
+        p > < strong > Team Name: < /strong> {team.team_name}</p >
+        <
+        h3 > Team Members: < /h3> <
+        ul > {
+            team.members.map((member) => ( <
+                li key = { member.id } >
+                <
+                strong > Name: < /strong> {member.name}, <strong>Skills:</strong > { member.skills } <
+                /li>
+            ))
+        } <
+        /ul> <
+        button onClick = { handleConfirm } > Confirm and Proceed < /button> < /
+        div >
+    );
+}
+
+export default ApplyProject;
