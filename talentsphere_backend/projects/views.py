@@ -2,14 +2,19 @@ from rest_framework import generics, permissions, status, serializers
 from rest_framework.response import Response
 from django.http import Http404
 from django.urls import reverse
+from django.views import View
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import InterviewSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Project, Team, ProjectApplication, TeamMembers, Interview  # Remove Application if not present
+from .models import Project, Team, ProjectApplication, TeamMember, Interview # Remove Application if not present
 from django.contrib.auth.models import User
-from .serializers import ProjectSerializer, TeamSerializer, ProjectApplicationSerializer
+from .serializers import get_notification_serializer
+from .serializers import ProjectSerializer, TeamSerializer, ProjectApplicationSerializer, get_notification_serializer
+from .serializers import InterviewSerializer, get_notification_serializer, StudentProfileSerializer
+
 
 # Endpoint for project owners to list and create projects.
 class ProjectListCreateView(generics.ListCreateAPIView):
@@ -42,20 +47,17 @@ class TeamListCreateView(generics.ListCreateAPIView):
 
         team = serializer.save()
         for member_data in members:
-            TeamMembers.objects.create(team=team, **member_data)
+            TeamMember.objects.create(team=team, **member_data)
 
             
 # Endpoint for student teams to apply for a project.
 class ApplyProjectView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def post(self, request):
         project_id = request.data.get("project_id")
         team_id = request.data.get("team_id")
 
-        if not project_id or not team_id:
-            return Response({"error": "Project ID and Team ID are required"}, status=400)
-        
         try:
             project = Project.objects.get(id=project_id)
             team = Team.objects.get(id=team_id)
@@ -64,19 +66,15 @@ class ApplyProjectView(APIView):
             )
 
             if not created:
-                return Response({"message": "Already applied!"}, status=400)
+                return Response({"message": "Your team has already applied. Thank you, do your best!"}, status=status.HTTP_400_BAD_REQUEST)
             
             interview_url = "/schedule-interview/:{projectId}"  # Django URL name
             return Response({"redirect_url": interview_url}, status=200)
 
-        except Project.DoesNotExist:
-            return Response({"error": "Invalid project"}, status=400)
-        except Team.DoesNotExist:
-            return Response({"error": "Invalid team ID"}, status=400)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
+        except (Project.DoesNotExist, Team.DoesNotExist):
+            return Response({"error": "Invalid project or team"}, status=400)
             
-        
+            
 
 # Endpoint for scheduling an interview (with AI integration placeholder).
 # class ScheduleInterviewView(APIView):
@@ -103,23 +101,21 @@ class ApplyProjectView(APIView):
 #             return Response({"error": "Invalid project or team"}, status=400)
 
 
-class ScheduleInterviewView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+class StudentDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        project_id = request.data.get("project_id")
-        date = request.data.get("date")
-        time = request.data.get("time")
-        
-        try:
-            project = Project.objects.get(id=project_id)
-            team = Team.objects.get(members__id=request.user.id)  # Get user’s team
-            Interview.objects.create(project=project, team=team, date=date, time=time)
-            return Response({"message": "Interview scheduled successfully!"})
-        except Project.DoesNotExist:
-            return Response({"error": "Invalid project"}, status=400)
-        except Team.DoesNotExist:
-            return Response({"error": "Team not found"}, status=400)
+    def get(self, request):
+        student = request.user
+        NotificationSerializer = get_notification_serializer()
+        interviews = Interview.objects.filter(student=student, status="Scheduled")
+        notifications = Notification.objects.filter(student=student, read=False)
+        profile = StudentProfile.objects.get(user=student)
+
+        return Response({
+            "interviews": InterviewSerializer(interviews, many=True).data,
+            "notifications": NotificationSerializer(notifications, many=True).data,
+            "credits": profile.credits
+        })
 
 
 
@@ -137,7 +133,7 @@ class TeamDetailsView(generics.RetrieveAPIView):
 
     def get_object(self):
         try:
-            team_member = TeamMembers.objects.get(user=self.request.user)  # Ensure TeamMember instance
+            team_member = TeamMember.objects.get(user=self.request.user)  # Ensure TeamMember instance
             return team_member.team  # Access the related team
         except ObjectDoesNotExist:
             raise NotFound("User is not part of any team")
@@ -150,14 +146,12 @@ class PostedProjectsByOwnerView(generics.ListAPIView):
         return Project.objects.filter(project_owner=self.request.user)
     
 class MyTeamView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
             team = Team.objects.get(members__id=request.user.id)
             serializer = TeamSerializer(team)
-            data = TeamSerializer(team).data
-            data["id"] = team.id
             return Response(serializer.data)
         except Team.DoesNotExist:
             return Response({"error": "No team found"}, status=404)
@@ -166,3 +160,40 @@ class UpdateTeamView(generics.UpdateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class StudentDashboardView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        student = request.user
+        interviews = Interview.objects.filter(student=student, status="Scheduled")
+        notifications = Notification.objects.filter(student=student, read=False)
+        profile = StudentProfile.objects.get(user=student)
+
+        return Response({
+            "interviews": InterviewSerializer(interviews, many=True).data,
+            "notifications": NotificationSerializer(notifications, many=True).data,
+            "credits": profile.credits
+        })
+
+
+# class ProjectOwnerDashboardView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         owner = request.user
+#         projects = Project.objects.filter(owner=owner)
+#         project_data = []
+
+#         for project in projects:
+#             applications = ProjectApplication.objects.filter(project=project)
+#             project_data.append({
+#                 "project": ProjectSerializer(project).data,
+#                 "applications": ProjectApplicationSerializer(applications, many=True).data
+#             })
+
+#         return Response(project_data)
+
+class ScheduleInterviewView(View):
+    def get(self, request):
+        return JsonResponse({"message": "Schedule Interview View"})

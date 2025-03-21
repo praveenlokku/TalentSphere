@@ -31,7 +31,7 @@ class Team(models.Model):
         return self.team_name
 
 
-class TeamMembers(models.Model):
+class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="members")
     name = models.CharField(max_length=255)
     skills = models.TextField(help_text="Comma-separated list of skills")
@@ -46,6 +46,14 @@ class ProjectApplication(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     applied_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default="Pending")
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reviewed_applications",
+        null=True,
+        blank=True
+    )
 
     
 
@@ -59,11 +67,24 @@ class ProjectApplication(models.Model):
 
 class Interview(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     scheduled_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=100, default="Pending")
-    feedback = models.TextField(null=True, blank=True)
 
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.message
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    college = models.CharField(max_length=255)
+    skills = models.TextField()
+    experience = models.TextField()
+
+    def __str__(self):
+        return self.user.username

@@ -31,7 +31,8 @@ function ScheduleInterview() {
         input type = "date"
         value = { date }
         onChange = {
-            (e) => setDate(e.target.value) }
+            (e) => setDate(e.target.value)
+        }
         />
 
         <
@@ -39,15 +40,18 @@ function ScheduleInterview() {
         input type = "time"
         value = { time }
         onChange = {
-            (e) => setTime(e.target.value) }
+            (e) => setTime(e.target.value)
+        }
         />
 
         <
         button onClick = {
-            () => handleSchedule(false) } > Schedule Interview < /button> <
+            () => handleSchedule(false)
+        } > Schedule Interview < /button> <
         button onClick = {
-            () => handleSchedule(true) } > Schedule Now < /button> <
-        /div>
+            () => handleSchedule(true)
+        } > Schedule Now < /button> < /
+        div >
     );
 }
 

@@ -23,7 +23,6 @@ function AvailableProjects() {
         navigate(`/apply/${projectId}`);
     };
 
-
     return ( <
         div >
         <
@@ -35,13 +34,12 @@ function AvailableProjects() {
                 h3 > { project.name } < /h3> <
                 p > { project.description } < /p> <
                 button onClick = {
-                    () => handleApply(project.id)
-                } > Apply < /button> < /
-                li >
+                    () => handleApply(project.id) } > Apply < /button> <
+                /li>
             ))
         } <
-        /ul> < /
-        div >
+        /ul> <
+        /div>
     );
 }
 

@@ -13,7 +13,7 @@ function ApplyProject() {
 
     const fetchTeam = async() => {
         try {
-            const response = await api.get("teams/my-team/");
+            const response = await api.get("my-team/");
             setTeam(response.data);
         } catch (error) {
             console.error("Error fetching team data:", error);
@@ -22,28 +22,21 @@ function ApplyProject() {
 
     const handleConfirm = async() => {
         try {
-            if (!team || !team.id) {
-                alert("Error: Team information is missing or not loaded!");
-                return;
-            }
+            const response = await api.post("projects/apply/", { project_id: projectId, team_id: team.id });
 
-            const response = await api.post("projects/apply/", {
-                project_id: projectId,
-                team_id: team.id,
-            });
-
+            // If application is successful, navigate to interview scheduling
             if (response.data.redirect_url) {
-                navigate(response.data.redirect_url); // ✅ Redirects to Interview Scheduling Page
-            } else {
-                alert("Application submitted successfully!");
+                navigate(response.data.redirect_url);
             }
         } catch (error) {
-            console.error(
-                "Error applying for project:",
-                error.response && error.response.data ? error.response.data : error.message
-            );
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data.message); // Show alert for duplicate application
+            } else {
+                console.error("Error applying for project:", error);
+            }
         }
     };
+
 
     if (!team) return <p > Loading... < /p>;
 

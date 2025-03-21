@@ -12,14 +12,13 @@ function MyTeam() {
 
     const fetchTeam = async() => {
         try {
-            const response = await api.get("/my-team/"); // Change based on actual endpoint
+            const response = await api.get("/my-team/"); // Assuming user’s team details API
             setTeam(response.data);
             setUpdatedTeam(response.data);
         } catch (error) {
-            console.error("Error fetching team data:", error.response ? error.response.data : error);
+            console.error("Error fetching team data:", error);
         }
     };
-
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -33,7 +32,7 @@ function MyTeam() {
 
     const handleSave = async() => {
         try {
-            await api.put(`/teams/${team.id}/`, updatedTeam);
+            await api.put(`teams/${team.id}/`, updatedTeam);
             setTeam(updatedTeam);
             setIsEditing(false);
         } catch (error) {
@@ -48,15 +47,13 @@ function MyTeam() {
             <
             h2 > My Team < /h2> <
             p > < strong > Team Name: < /strong> {team.team_name}</p >
-
             <
             h3 > Team Members < /h3> <
             ul > {
-                updatedTeam &&
-                updatedTeam.members.map((member, index) => ( <
+                team.members.map((member, index) => ( <
                         li key = { index } >
                         <
-                        strong > Name: < /strong>{" "} {
+                        strong > Name: < /strong> {
                         isEditing ? ( <
                             input type = "text"
                             value = { updatedTeam.members[index].name }
@@ -71,7 +68,7 @@ function MyTeam() {
                     br / >
 
                     <
-                    strong > Skills: < /strong>{" "} {
+                    strong > Skills: < /strong> {
                     isEditing ? ( <
                         input type = "text"
                         value = { updatedTeam.members[index].skills }
@@ -86,7 +83,7 @@ function MyTeam() {
                 br / >
 
                 <
-                strong > Role: < /strong>{" "} {
+                strong > Role: < /strong> {
                 isEditing ? ( <
                     input type = "text"
                     value = { updatedTeam.members[index].role }
@@ -101,7 +98,7 @@ function MyTeam() {
             br / >
 
             <
-            strong > College: < /strong>{" "} {
+            strong > College: < /strong> {
             isEditing ? ( <
                 input type = "text"
                 value = { updatedTeam.members[index].college }
@@ -124,7 +121,7 @@ function MyTeam() {
     isEditing ? ( <
         button onClick = { handleSave } > Save Changes < /button>
     ) : ( <
-        button onClick = { handleEdit } > Edit TeamDetails < /button>
+        button onClick = { handleEdit } > Edit Team < /button>
     )
 } <
 /div>

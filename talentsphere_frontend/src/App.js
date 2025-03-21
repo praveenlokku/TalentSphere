@@ -8,7 +8,7 @@ import ProjectOwnerDashboard from "./pages/ProjectOwnerDashboard";
 import PostProject from "./pages/PostProject";
 import CreateTeam from "./pages/CreateTeam";
 import ApplyProject from "./pages/ApplyProject";
-import MyTeam from "./pages/MyTeam"; // Updated import name for clarity
+import MyTeam from "./pages/MyTeam";
 import ScheduleInterview from "./pages/ScheduleInterview";
 import AvailableProjects from "./pages/AvailableProjects";
 import ProjectsAndApplications from "./pages/ProjectsAndApplications";
@@ -55,8 +55,7 @@ function App() {
         /> <
         Route path = "/schedule-interview/:projectId"
         element = { < ScheduleInterview / > }
-        />  <
-        /
+        />  < /
         Routes > <
         /Router>
     );
