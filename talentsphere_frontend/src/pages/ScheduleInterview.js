@@ -9,8 +9,26 @@ function ScheduleInterview() {
     const navigate = useNavigate();
 
     const handleSchedule = async(startNow = false) => {
+        let interviewDate = date;
+        let interviewTime = time;
+
+        if (startNow) {
+            const now = new Date();
+            interviewDate = now.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+            interviewTime = now.toTimeString().split(" ")[0].slice(0, 5); // Format: HH:MM
+        }
+
+        if (!interviewDate || !interviewTime) {
+            alert("Please select a valid date and time.");
+            return;
+        }
+
         try {
-            await api.post("interviews/schedule/", { project_id: projectId, date, time });
+            await api.post("interviews/schedule/", {
+                project_id: projectId,
+                date: interviewDate,
+                time: interviewTime
+            });
 
             if (startNow) {
                 navigate(`/start-interview/${projectId}`); // Redirect to AI Interviewer
@@ -26,13 +44,14 @@ function ScheduleInterview() {
     return ( <
         div >
         <
-        h2 > Schedule Your Team Interview < /h2> <
+        h2 > Schedule Your Team Interview < /h2>
+
+        <
         label > Date: < /label> <
         input type = "date"
         value = { date }
         onChange = {
-            (e) => setDate(e.target.value)
-        }
+            (e) => setDate(e.target.value) }
         />
 
         <
@@ -40,18 +59,15 @@ function ScheduleInterview() {
         input type = "time"
         value = { time }
         onChange = {
-            (e) => setTime(e.target.value)
-        }
+            (e) => setTime(e.target.value) }
         />
 
         <
         button onClick = {
-            () => handleSchedule(false)
-        } > Schedule Interview < /button> <
+            () => handleSchedule(false) } > Schedule Interview < /button> <
         button onClick = {
-            () => handleSchedule(true)
-        } > Schedule Now < /button> < /
-        div >
+            () => handleSchedule(true) } > Schedule Now < /button> <
+        /div>
     );
 }
 

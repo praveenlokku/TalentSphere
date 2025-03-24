@@ -55,7 +55,10 @@ function App() {
         /> <
         Route path = "/schedule-interview/:projectId"
         element = { < ScheduleInterview / > }
-        />  < /
+        />  <
+        Route path = "/schedule-interview/"
+        element = { < ScheduleInterview / > }
+        /> < /
         Routes > <
         /Router>
     );
