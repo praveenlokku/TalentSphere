@@ -4,9 +4,12 @@ from django.http import Http404
 from django.urls import reverse
 from datetime import datetime
 from django.views import View
+from channels.layers import get_channel_layer  # Handles WebSocket communication
+from asgiref.sync import async_to_sync 
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.contrib.auth import logout
+from rest_framework.permissions import AllowAny
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import InterviewSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -108,6 +111,16 @@ class ApplyProjectView(APIView):
 #         except (Project.DoesNotExist, Team.DoesNotExist):
 #             return Response({"error": "Invalid project or team"}, status=400)
 
+
+def send_notification(message):
+    channel_layer = get_channel_layer()  # Get WebSocket channel
+    async_to_sync(channel_layer.group_send)(
+        "notifications",  # Group name (all users in this group get the message)
+        {
+            "type": "send_notification",  # Function to call in the WebSocket Consumer
+            "message": message,  # Message to send
+        }
+    )
 
 class StudentDashboardView(APIView):
     permission_classes = [IsAuthenticated]
@@ -305,3 +318,54 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "Logged out successfully"}, status=200)
+
+
+class PaymentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        owner = request.user
+        payments = Payment.objects.filter(owner=owner)
+        serializer = PaymentSerializer(payments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, project_id):
+        try:
+            payment = Payment.objects.get(project_id=project_id, owner=request.user)
+            payment.status = "Paid"
+            payment.save()
+            return Response({"message": "Payment completed successfully!"})
+        except Payment.DoesNotExist:
+            return Response({"error": "Payment not found!"}, status=400)
+
+
+
+class ProjectSearchView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        skills = request.GET.getlist("skills", [])
+        min_credits = request.GET.get("min_credits")
+        max_credits = request.GET.get("max_credits")
+        deadline = request.GET.get("deadline")
+
+        projects = Project.objects.all()
+
+        if skills:
+            projects = projects.filter(skills_required__contains=skills)
+        if min_credits:
+            projects = projects.filter(credits__gte=min_credits)
+        if max_credits:
+            projects = projects.filter(credits__lte=max_credits)
+        if deadline:
+            projects = projects.filter(deadline__lte=deadline)
+
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)        
+        
+
+
+
+        
+
+

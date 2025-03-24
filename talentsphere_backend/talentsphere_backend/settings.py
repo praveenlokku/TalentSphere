@@ -42,9 +42,18 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "users",
+    "channels",
+    # "chat",
     'projects',
     'rest_framework_simplejwt',
 ]
+
+ASGI_APPLICATION = "talentsphere.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 
@@ -73,12 +74,13 @@ class Interview(models.Model):
     scheduled_at = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=now)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.message
+        return f"Notification for {self.student.username}: {self.message[:30]}"
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -88,3 +90,9 @@ class StudentProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+class Payment(models.Model):
+    project = models.OneToOneField("Project", on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=[("Pending", "Pending"), ("Paid", "Paid")], default="Pending")
+    created_at = models.DateTimeField(auto_now_add=True)

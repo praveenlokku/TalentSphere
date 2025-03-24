@@ -9,6 +9,7 @@ import PostProject from "./pages/PostProject";
 import CreateTeam from "./pages/CreateTeam";
 import ApplyProject from "./pages/ApplyProject";
 import MyTeam from "./pages/MyTeam";
+import InterviewPage from "./pages/InterviewPage";
 import ScheduleInterview from "./pages/ScheduleInterview";
 import AvailableProjects from "./pages/AvailableProjects";
 import ProjectsAndApplications from "./pages/ProjectsAndApplications";
@@ -58,7 +59,10 @@ function App() {
         />  <
         Route path = "/schedule-interview/"
         element = { < ScheduleInterview / > }
-        /> < /
+        /> <Route path="/interview
+        "
+        element = { < InterviewPage / > }
+        />< /
         Routes > <
         /Router>
     );
