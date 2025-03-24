@@ -1,0 +1,7 @@
+django
+dj-database-url
+django-cors-headers
+django-extensions
+djangorestframework
+djangorestframework-simplejwt
+psycopg2
