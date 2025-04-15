@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "postgresql://praveen:XP3mo1FuapzWTYbHqLCkTo3tXc8y1jXJ@dpg-cve1qdvnoe9s73ek7qg0-a.oregon-postgres.render.com/talentsphere"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'stujya.site']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'stujya.site', 'www.stujya.site']
 
 
 # Application definition
