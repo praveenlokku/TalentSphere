@@ -26,7 +26,7 @@ SECRET_KEY = "postgresql://praveen:XP3mo1FuapzWTYbHqLCkTo3tXc8y1jXJ@dpg-cve1qdvn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'stujya.site', 'www.stujya.site']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'stujya.site', 'www.stujya.site', 'stujya.onrender.com', 'https://stujya.site']
 
 
 # Application definition
