@@ -55,25 +55,42 @@ User = get_user_model()
 
 class SignupView(APIView):
     def post(self, request):
-        username = request.data.get("username")
-        email = request.data.get("email")
-        password = request.data.get("password")
-        user_type = request.data.get("user_type")  # "student" or "project_owner"
+        data = request.data
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+        user_type = data.get("user_type")
 
-        # Basic validation
-        if not username or not email or not password:
-            return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+
+        university = data.get("university")
+        major = data.get("major")
+        graduation_year = data.get("graduation_year")
+
+        organization = data.get("organization")
+        position = data.get("position")
+        industry = data.get("industry")
+
+        if not username or not email or not password or not user_type:
+            return Response({"error": "Required fields missing."}, status=status.HTTP_400_BAD_REQUEST)
 
         if User.objects.filter(email=email).exists():
             return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Use create_user for proper password handling
         user = User.objects.create_user(
             username=username,
             email=email,
-            password=password
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            user_type=user_type,
+            university=university,
+            major=major,
+            graduation_year=graduation_year,
+            organization=organization,
+            position=position,
+            industry=industry
         )
-        user.user_type = user_type
-        user.save()
 
         return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)

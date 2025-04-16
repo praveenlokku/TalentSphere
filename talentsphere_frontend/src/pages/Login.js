@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -52,6 +51,8 @@ function Login() {
                 (e) => setPassword(e.target.value) }
             /> <
             button onClick = { handleLogin } > Login < /button> <
+                button onClick = {
+                    () => navigate('/signup') } > Register < /button> <
                 /div>
         );
     }

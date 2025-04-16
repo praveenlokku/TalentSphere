@@ -14,7 +14,6 @@ import ScheduleInterview from "./pages/ScheduleInterview";
 import AvailableProjects from "./pages/AvailableProjects";
 import ProjectsAndApplications from "./pages/ProjectsAndApplications";
 
-
 function App() {
     return ( <
         Router >
