@@ -54,7 +54,7 @@ function Signup() {
                     }),
             };
 
-            await axios.post("http://127.0.0.1:8000/api/signup/", payload);
+            await axios.post("https://talentsphere-lbap.onrender.com/api/signup/", payload);
             alert("Signup successful! Please login.");
             navigate("/login");
         } catch (error) {
