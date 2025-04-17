@@ -134,13 +134,17 @@ function StudentDashboard() {
     target = "_blank"
     rel = "noopener noreferrer" >
         <
-        button > Go to GitHub < /button> < /
+        button style = {
+            { cursor: "pointer" }
+        }> Go to GitHub < /button> < /
     a > <
         a href = "https://vscode.dev/"
     target = "_blank"
     rel = "noopener noreferrer" >
         <
-        button > Open VS Code < /button> < /
+        button style = {
+            { cursor: "pointer" }
+        }> Open VS Code < /button> < /
     a >
 
         <
@@ -148,19 +152,29 @@ function StudentDashboard() {
         <
         button onClick = {
             () => navigate('/create-team')
-        } > Create a Team < /button> <
+        } style = {
+            { cursor: "pointer" }
+        }> Create a Team < /button> <
     button onClick = {
         () => navigate("/available-projects")
-    } > Find Projects < /button> <
+    }style = {
+            { cursor: "pointer" }
+        } > Find Projects < /button> <
     button onClick = {
         () => navigate("/schedule-interview")
-    } > Practice Interview < /button> <
+    }style = {
+            { cursor: "pointer" }
+        } > Practice Interview < /button> <
     button onClick = {
         () => navigate("/my-team")
-    } > My Team < /button><
+    }style = {
+            { cursor: "pointer" }
+        } > My Team < /button><
     button onClick = {
         () => navigate("/myprojecct")
-    } > Ats Score < /button> < / >
+    }style = {
+            { cursor: "pointer" }
+        } > Ats Score < /button> < / >
 ): ( <
     p > Loading... < /p>
 )
