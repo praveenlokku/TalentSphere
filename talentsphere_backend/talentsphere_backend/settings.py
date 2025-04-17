@@ -26,7 +26,15 @@ SECRET_KEY = "postgresql://praveen:XP3mo1FuapzWTYbHqLCkTo3tXc8y1jXJ@dpg-cve1qdvn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'stujya.site', 'www.stujya.site', 'stujya.onrender.com', 'https://stujya.site', 'https://talentsphere-lbap.onrender.com', "api.stujya.site"]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'testserver',
+    'stujya.site',
+    'www.stujya.site',
+    'talentsphere-lbap.onrender.com',
+    'api.stujya.site',
+]
 
 
 # Application definition
@@ -69,6 +77,8 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend
+    "https://stujya.site",
+    "https://www.stujya.site",
 ]
 
 
