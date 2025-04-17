@@ -68,7 +68,7 @@ function StudentDashboard() {
         h2 > Student Dashboard < /h2> <
         button onClick = { handleLogout }
         style = {
-            { backgroundColor: "red", color: "white" }
+            { backgroundColor: "red", color: "white",cursor: "pointer" }
         } > Logout < /button> < /
         div >
 
