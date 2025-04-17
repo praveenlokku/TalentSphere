@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8000/api/",
+    baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api/",
 });
 
 // Add token to request headers
@@ -10,8 +10,6 @@ api.interceptors.request.use(
         const token = localStorage.getItem("token");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
-        } else {
-            console.error("No token found in localStorage. Please log in.");
         }
         return config;
     },
