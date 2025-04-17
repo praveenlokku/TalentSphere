@@ -7,7 +7,7 @@ function Home() {
     return ( <
         div style = {
             { textAlign: "center", padding: "50px" }
-        } ><Helmet><title>Stujya | Home</title></Helmet>
+        } ><title>Stujya | Home</title>
         <
         h1 > Welcome to TalentSphere < /h1> <
         p > Connect students with industrial projects. < /p> <
