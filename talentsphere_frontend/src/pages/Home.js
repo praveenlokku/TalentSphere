@@ -9,8 +9,8 @@ function Home() {
             { textAlign: "center", padding: "50px" }
         } ><title>Stujya | Home</title>
         <
-        h1 > Welcome to TalentSphere < /h1> <
-        p > Connect students with industrial projects. < /p> <
+        h1 > Welcome to Stujya < /h1> <
+        p > Brisging the Gap between the students and the Industry. < /p> <
         button onClick = {
             () => navigate("/login")
         } > Login < /button> <
