@@ -34,6 +34,10 @@ ALLOWED_HOSTS = [
     'www.stujya.site',
     'talentsphere-lbap.onrender.com',
     'api.stujya.site',
+    "https://www.stujya.xyz",
+    "https://stujya.xyz",
+    "www.stujya.xyz",
+    'stujya.xyz'
 ]
 
 
