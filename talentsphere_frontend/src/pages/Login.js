@@ -38,7 +38,7 @@ function Login() {
                     { color: "red" } } > { error } < /p>} <
                 input
             type = "email"
-            placeholder = "Email"
+            placeholder = "UserName"
             value = { email }
             onChange = {
                 (e) => setEmail(e.target.value) }
