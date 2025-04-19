@@ -83,6 +83,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React frontend
     "https://stujya.site",
     "https://www.stujya.site",
+    "https://www.stujya.xyz",
+    "https://stujya.xyz",
 ]
 
 
