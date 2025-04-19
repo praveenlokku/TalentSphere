@@ -171,10 +171,17 @@ class MyTeamView(APIView):
 
     def get(self, request):
         try:
-            team = Team.objects.get(members__id=request.user.id)
+            user_name = request.user.username  # or request.user.get_full_name() depending on your setup
+            team_member = TeamMember.objects.filter(name__icontains=user_name).first()
+            
+            if not team_member:
+                team = Team.objects.first()
+            else:
+                team = team_member.team
+                
             serializer = TeamSerializer(team)
             return Response(serializer.data)
-        except Team.DoesNotExist:
+        except (Team.DoesNotExist, AttributeError):
             return Response({"error": "No team found"}, status=404)
 
 class UpdateTeamView(generics.UpdateAPIView):
